@@ -7,6 +7,13 @@ y este proyecto sigue [Semantic Versioning](https://semver.org/lang/es/).
 
 ## [Unreleased]
 
+### feature/notification-model
+### Added
+- Entidad `Notification` con enums `Channel`, `Priority` y `NotificationStatus`.
+- Repositorio JPA `NotificationRepository` con test unitario (`@DataJpaTest`).
+
+
+### feature/proyect-setup
 ### Added
 - Configuración base del proyecto: dependencias de JPA, PostgreSQL, validación,
   seguridad, RabbitMQ, mail y JWT (jjwt).
