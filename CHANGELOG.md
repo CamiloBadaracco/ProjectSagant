@@ -7,11 +7,20 @@ y este proyecto sigue [Semantic Versioning](https://semver.org/lang/es/).
 
 ## [Unreleased]
 
+### feature/security-jwt
+### Added
+- Autenticación JWT usando Spring Security 7 (spring-boot-starter-security-oauth2-resource-server):
+  `JwtConfig`, `JwtService`, `SecurityConfig` y endpoint `POST /api/auth/token`.
+- Tests unitarios del ciclo de vida del token y de integración del endpoint de login.
+
+### Fixed
+- Ajustes de imports por la modularización de Spring Boot 4.1 (`@DataJpaTest`,
+  `@AutoConfigureMockMvc`, `MacAlgorithm`, Jackson 3/`JsonMapper`).
+
 ### feature/notification-model
 ### Added
 - Entidad `Notification` con enums `Channel`, `Priority` y `NotificationStatus`.
 - Repositorio JPA `NotificationRepository` con test unitario (`@DataJpaTest`).
-
 
 ### feature/proyect-setup
 ### Added
