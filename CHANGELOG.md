@@ -7,6 +7,8 @@ y este proyecto sigue [Semantic Versioning](https://semver.org/lang/es/).
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-07-30
+
 ### feature/docker-and-docs
 ### Added
 - `Dockerfile` (build multi-stage) y `docker-compose.yml` con los 4 servicios
