@@ -7,6 +7,21 @@ y este proyecto sigue [Semantic Versioning](https://semver.org/lang/es/).
 
 ## [Unreleased]
 
+### feature/dispatch-channels
+### Added
+- Patrón Strategy para el despacho: `NotificationDispatcher` con implementaciones
+  `LogNotificationDispatcher`, `HttpNotificationDispatcher` (RestClient) y
+  `EmailNotificationDispatcher` (JavaMailSender), resueltas vía `DispatcherRegistry`.
+- `NotificationConsumer`: escucha la cola, despacha (log siempre + canal elegido),
+  reintenta una vez ante fallo, y si vuelve a fallar marca la notificación como
+  `FAILED` y rechaza el mensaje para que caiga en la DLQ.
+- Tests unitarios de cada dispatcher (incluye casos de fallo) y del consumer
+  (camino exitoso y camino de reintento + rechazo).
+
+### Fixed
+- `spring.mail.host`/`port` agregado a la config de test para que el bean
+  `JavaMailSender` se pueda crear sin necesitar un servidor SMTP real corriendo.
+
 ### feature/notification-api
 ### Added
 - Endpoint `POST /api/notifications` y `GET /api/notifications/{id}`, protegidos con JWT.
