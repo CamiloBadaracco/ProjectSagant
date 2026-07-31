@@ -7,6 +7,15 @@ y este proyecto sigue [Semantic Versioning](https://semver.org/lang/es/).
 
 ## [Unreleased]
 
+### feature/notification-api
+### Added
+- Endpoint `POST /api/notifications` y `GET /api/notifications/{id}`, protegidos con JWT.
+- `NotificationService`: persiste la notificación (PENDING) y la publica en la cola;
+  si el broker falla, la notificación queda igual guardada (el REST no se cae).
+- `GlobalExceptionHandler` con mensajes de validación descriptivos por campo.
+- Tests unitarios del service (incluye el caso de RabbitMQ caído) y de integración
+  del endpoint (con y sin token, validación, 404).
+
 ### feature/rabbitmq-messaging
 ### Added
 - Configuración de RabbitMQ: exchange, cola principal, dead-letter exchange/queue
