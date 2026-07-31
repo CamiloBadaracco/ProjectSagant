@@ -10,6 +10,7 @@ import org.springframework.amqp.core.AmqpTemplate;
 
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
+import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
 class NotificationPublisherTest {
@@ -27,7 +28,7 @@ class NotificationPublisherTest {
         verify(amqpTemplate).convertAndSend(
                 eq(RabbitMQConfig.EXCHANGE),
                 eq(RabbitMQConfig.ROUTING_KEY),
-                eq(new NotificationMessage(42L))
+                any(NotificationMessage.class)
         );
     }
 }

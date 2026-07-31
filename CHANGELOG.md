@@ -7,6 +7,20 @@ y este proyecto sigue [Semantic Versioning](https://semver.org/lang/es/).
 
 ## [Unreleased]
 
+### feature/resilience-observability
+### Added
+- Logs estructurados en JSON (`logstash-logback-encoder`), reemplazando el formato
+  de texto plano.
+- `CorrelationIdFilter`: genera/propaga un correlation id por request HTTP (header
+  `X-Correlation-Id`), visible en todos los logs de esa request.
+- El correlation id viaja también en el mensaje de RabbitMQ, así se puede trazar
+  una notificación desde el request original hasta que se despacha de forma asincrónica.
+- Actuator con el endpoint `/actuator/health` público (sin autenticación).
+
+### Fixed
+- Health checks de RabbitMQ y Mail deshabilitados en el perfil de test (mismo
+  criterio que con H2: los tests no deberían depender de infraestructura externa).
+
 ### feature/dispatch-channels
 ### Added
 - Patrón Strategy para el despacho: `NotificationDispatcher` con implementaciones

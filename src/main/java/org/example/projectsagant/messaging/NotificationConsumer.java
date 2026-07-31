@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.amqp.AmqpRejectAndDontRequeueException;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
+import org.slf4j.MDC;
 
 @Component
 public class NotificationConsumer {
@@ -27,29 +28,37 @@ public class NotificationConsumer {
 
     @RabbitListener(queues = RabbitMQConfig.QUEUE)
     public void onMessage(NotificationMessage message) {
-        Notification notification = repository.findById(message.notificationId()).orElse(null);
-        if (notification == null) {
-            log.warn("Notificación {} no encontrada, se descarta el mensaje", message.notificationId());
-            return;
+        if (message.correlationId() != null) {
+            MDC.put("correlationId", message.correlationId());
         }
+        MDC.put("notificationId", String.valueOf(message.notificationId()));
+        try {
+            Notification notification = repository.findById(message.notificationId()).orElse(null);
+            if (notification == null) {
+                log.warn("Notificación {} no encontrada, se descarta el mensaje", message.notificationId());
+                return;
+            }
 
-        notification.setStatus(NotificationStatus.PROCESSING);
-        repository.save(notification);
-
-        boolean dispatched = attemptDispatch(notification);
-        if (!dispatched) {
-            notification.incrementAttempts();
-            dispatched = attemptDispatch(notification); // un reintento
-        }
-
-        if (dispatched) {
-            notification.setStatus(NotificationStatus.SENT);
+            notification.setStatus(NotificationStatus.PROCESSING);
             repository.save(notification);
-        } else {
-            notification.setStatus(NotificationStatus.FAILED);
-            repository.save(notification);
-            log.error("Notificación {} falló tras {} intentos, va a la DLQ", notification.getId(), notification.getAttempts() + 1);
-            throw new AmqpRejectAndDontRequeueException("Despacho fallido para la notificación " + notification.getId());
+
+            boolean dispatched = attemptDispatch(notification);
+            if (!dispatched) {
+                notification.incrementAttempts();
+                dispatched = attemptDispatch(notification);
+            }
+
+            if (dispatched) {
+                notification.setStatus(NotificationStatus.SENT);
+                repository.save(notification);
+            } else {
+                notification.setStatus(NotificationStatus.FAILED);
+                repository.save(notification);
+                log.error("Notificación {} falló tras {} intentos, va a la DLQ", notification.getId(), notification.getAttempts() + 1);
+                throw new AmqpRejectAndDontRequeueException("Despacho fallido para la notificación " + notification.getId());
+            }
+        } finally {
+            MDC.clear();
         }
     }
 
