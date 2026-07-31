@@ -7,6 +7,8 @@ y este proyecto sigue [Semantic Versioning](https://semver.org/lang/es/).
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-07-30
+
 ### feature/resilience-observability
 ### Added
 - Logs estructurados en JSON (`logstash-logback-encoder`), reemplazando el formato
