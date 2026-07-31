@@ -7,6 +7,18 @@ y este proyecto sigue [Semantic Versioning](https://semver.org/lang/es/).
 
 ## [Unreleased]
 
+### feature/rabbitmq-messaging
+### Added
+- Configuración de RabbitMQ: exchange, cola principal, dead-letter exchange/queue
+  y bindings (`RabbitMQConfig`).
+- `NotificationPublisher` para encolar notificaciones, con test unitario (Mockito).
+- `RabbitAdmin` configurado con `ignoreDeclarationExceptions=true`: el REST sigue
+  funcionando aunque el broker no esté disponible al arrancar.
+
+### Fixed
+- Eliminado un `RabbitTemplate` propio que chocaba con el autoconfigurado por
+  Spring Boot (usamos el `MessageConverter` como bean para que Boot lo aplique solo).
+
 ### feature/security-jwt
 ### Added
 - Autenticación JWT usando Spring Security 7 (spring-boot-starter-security-oauth2-resource-server):
