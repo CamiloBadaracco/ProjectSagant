@@ -9,6 +9,16 @@ y este proyecto sigue [Semantic Versioning](https://semver.org/lang/es/).
 
 ## [1.0.0] - 2026-07-30
 
+### feature/docker-and-docs
+### Added
+- `Dockerfile` (build multi-stage) y `docker-compose.yml` con los 4 servicios
+  (app, PostgreSQL, RabbitMQ, Mailhog).
+- README final con todas las secciones requeridas: cómo levantar el proyecto,
+  precondiciones, credenciales de prueba, decisiones de diseño, trade-offs y
+  limitaciones, y consideración sobre Jakarta EE.
+- Configuración por variables de entorno (`DB_HOST`, `RABBITMQ_HOST`, `MAIL_HOST`,
+  etc.) para que la app funcione igual en local y en Docker Compose.
+
 ### feature/resilience-observability
 ### Added
 - Logs estructurados en JSON (`logstash-logback-encoder`), reemplazando el formato
