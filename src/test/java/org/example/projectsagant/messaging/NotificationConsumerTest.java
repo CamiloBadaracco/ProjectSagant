@@ -39,7 +39,7 @@ class NotificationConsumerTest {
         when(repository.findById(1L)).thenReturn(Optional.of(n));
         when(dispatcherRegistry.resolve(Channel.LOG)).thenReturn(logDispatcher);
 
-        consumer.onMessage(new NotificationMessage(1L));
+        consumer.onMessage(new NotificationMessage(1L, "test-correlation"));
 
         assertThat(n.getStatus()).isEqualTo(NotificationStatus.SENT);
     }
@@ -52,7 +52,7 @@ class NotificationConsumerTest {
         when(dispatcherRegistry.resolve(Channel.LOG)).thenReturn(logDispatcher);
         doThrow(new DispatchException("falla", new RuntimeException())).when(logDispatcher).dispatch(n);
 
-        assertThrows(AmqpRejectAndDontRequeueException.class, () -> consumer.onMessage(new NotificationMessage(2L)));
+        assertThrows(AmqpRejectAndDontRequeueException.class, () -> consumer.onMessage(new NotificationMessage(2L, "test-correlation")));
 
         assertThat(n.getStatus()).isEqualTo(NotificationStatus.FAILED);
         verify(logDispatcher, times(2)).dispatch(n); // intento inicial + 1 reintento
